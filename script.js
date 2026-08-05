@@ -1,7 +1,7 @@
-/* tairqaldy.xyz v3 — poster layout, sticker chips, spring physics */
+/* tairqaldy.xyz v4 — more life: letter waves, floating bits, bouncy stickers */
 
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const COLORS = ["#00afca", "#ffc93c", "#ff6b57"];
+const COLORS = ["#00afca", "#ffc93c", "#ff6b57", "#9b6bff", "#3ecf8e"];
 
 // ---------- live Astana clock ----------
 const clockEl = document.getElementById("clock");
@@ -15,7 +15,7 @@ setInterval(tick, 1000);
 
 // ---------- staggered reveal ----------
 document.querySelectorAll(".reveal").forEach((el, i) => {
-  el.style.setProperty("--d", `${Math.min(0.08 + i * 0.06, 0.9)}s`);
+  el.style.setProperty("--d", `${Math.min(0.08 + i * 0.07, 0.85)}s`);
 });
 
 addEventListener("load", () => {
@@ -23,14 +23,68 @@ addEventListener("load", () => {
 });
 setTimeout(() => document.body.classList.add("loaded"), 1800);
 
-// ---------- marquee ----------
+// ---------- first name letter wave ----------
+const first = document.getElementById("first-name");
+first.innerHTML = first.textContent
+  .split("")
+  .map((ch) => `<span class="ltr">${ch}</span>`)
+  .join("");
+const letters = [...first.querySelectorAll(".ltr")];
+
+document.getElementById("name").addEventListener("pointerenter", () => {
+  if (reduceMotion) return;
+  letters.forEach((l, i) => {
+    setTimeout(() => {
+      l.classList.add("up");
+      setTimeout(() => l.classList.remove("up"), 320);
+    }, i * 70);
+  });
+});
+
+// ---------- marquee (colophon lives here now) ----------
 const words = [
   "obsessed", "настойчивый", "ship &gt; talk", "adhd is a feature",
   "20+ fails, still here", "build in public", "салем әлем",
   "astana standard time", "18 &amp; shipping", "talk is cheap, show me the code",
+  "&copy; 2026 tair qaldybayev", "made with stickers &amp; adhd energy",
 ];
 const half = words.map((w) => `<span>${w}</span><span class="sep">✦</span>`).join("");
 document.getElementById("marquee-track").innerHTML = half + half;
+
+// ---------- floating confetti bits ----------
+const BIT_SHAPES = [
+  (c) => `<svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 1v12M1 7h12" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+  (c) => `<svg width="11" height="11" viewBox="0 0 11 11"><circle cx="5.5" cy="5.5" r="4.4" fill="none" stroke="${c}" stroke-width="2.2"/></svg>`,
+  (c) => `<svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" rx="2" fill="${c}" transform="rotate(14 6 6)"/></svg>`,
+  (c) => `<svg width="18" height="8" viewBox="0 0 18 8"><path d="M1 6c2.6-5 5.4-5 8 0s5.4 5 8 0" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round"/></svg>`,
+  (c) => `<svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 0l1.6 4.9H13L8.9 8l1.6 5-4-3.1-4 3.1 1.6-5L0 4.9h4.9Z" fill="${c}"/></svg>`,
+];
+
+const bitsZone = document.getElementById("bits");
+const bits = [];
+const BIT_SPOTS = [
+  [8, 16], [22, 6], [38, 12], [60, 7], [76, 15], [91, 9],
+  [5, 46], [94, 44], [9, 72], [90, 70], [26, 90], [55, 93], [74, 88], [42, 40],
+];
+
+BIT_SPOTS.forEach(([x, y], i) => {
+  const wrap = document.createElement("span");
+  wrap.className = "bit";
+  wrap.style.left = x + "vw";
+  wrap.style.top = y + "vh";
+  wrap.style.setProperty("--bd", 7 + Math.random() * 6 + "s");
+  wrap.style.setProperty("--bdel", -Math.random() * 8 + "s");
+  wrap.innerHTML = BIT_SHAPES[i % BIT_SHAPES.length](COLORS[i % COLORS.length]);
+  bitsZone.appendChild(wrap);
+  bits.push({ el: wrap, depth: 0.008 + Math.random() * 0.02, x: 0, y: 0 });
+});
+
+// pointer parallax on the bits
+const mouse = { x: 0, y: 0 };
+addEventListener("pointermove", (e) => {
+  mouse.x = e.clientX - innerWidth / 2;
+  mouse.y = e.clientY - innerHeight / 2;
+});
 
 // ---------- sticker chips ----------
 const KZ_FLAG = `<svg class="flag" width="52" height="34" viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg">
@@ -42,10 +96,9 @@ const KZ_FLAG = `<svg class="flag" width="52" height="34" viewBox="0 0 52 34" xm
     <line x1="18.6" y1="7.6" x2="20.2" y2="9.2"/><line x1="31.8" y1="20.8" x2="33.4" y2="22.4"/>
     <line x1="33.4" y1="7.6" x2="31.8" y2="9.2"/><line x1="20.2" y1="20.8" x2="18.6" y2="22.4"/>
   </g>
-  <g fill="#ffec3e"><circle cx="6" cy="6" r="1.1"/><circle cx="6" cy="12" r="1.1"/><circle cx="6" cy="18" r="1.1"/><circle cx="6" cy="24" r="1.1"/><circle cx="6" cy="30" r="1.1" opacity="0"/></g>
+  <g fill="#ffec3e"><circle cx="6" cy="6" r="1.1"/><circle cx="6" cy="12" r="1.1"/><circle cx="6" cy="18" r="1.1"/><circle cx="6" cy="24" r="1.1"/></g>
 </svg>`;
 
-// type: logo (svg file) | text | brand (serif wordmark) | flag
 const STICKERS = [
   { type: "flag", lbl: "qazaqstan", side: "l", gx: 0.42, y: 9 },
   { type: "logo", slug: "claude", lbl: "claude", size: 30, side: "l", gx: 0.5, y: 26 },
@@ -83,7 +136,7 @@ STICKERS.forEach((s, i) => {
   el.innerHTML = chipHTML(s);
   zone.appendChild(el);
   items.push({
-    el, cfg: s, rot: ROTS[i],
+    el, cfg: s, rot: ROTS[i], hx: 0, hy: 0,
     dx: 0, dy: 0, tx: 0, ty: 0, vx: 0, vy: 0, tilt: 0, scale: 1,
     dragging: false, settled: false,
   });
@@ -105,8 +158,10 @@ function layoutStickers() {
       const gx = innerWidth - gutter + gutter * cfg.gx - w / 2;
       x = Math.max(Math.min(gx, innerWidth - w - 12), innerWidth - gutter + 16);
     }
+    it.hx = x;
+    it.hy = (cfg.y / 100) * innerHeight;
     el.style.left = x + "px";
-    el.style.top = (cfg.y / 100) * innerHeight + "px";
+    el.style.top = it.hy + "px";
   }
 }
 layoutStickers();
@@ -116,7 +171,7 @@ setTimeout(() => {
   items.forEach(({ el }) => el.classList.add("on"));
 }, reduceMotion ? 0 : 300);
 
-// physics: lerp toward pointer while dragging, inertia + tilt decay after release
+// physics loop: drag lerp, inertia, viewport edge bounce, bit parallax
 function frame() {
   for (const it of items) {
     if (!it.settled) continue;
@@ -133,8 +188,13 @@ function frame() {
     } else if (Math.abs(it.vx) > 0.04 || Math.abs(it.vy) > 0.04 || Math.abs(it.tilt) > 0.08 || scaleMoving) {
       it.dx += it.vx;
       it.dy += it.vy;
-      it.vx *= 0.93;
-      it.vy *= 0.93;
+      // bounce off viewport edges while gliding
+      const w = it.el.offsetWidth, h = it.el.offsetHeight;
+      const px = it.hx + it.dx, py = it.hy + it.dy;
+      if ((px < 4 && it.vx < 0) || (px + w > innerWidth - 4 && it.vx > 0)) it.vx *= -0.55;
+      if ((py < 4 && it.vy < 0) || (py + h > innerHeight - 4 && it.vy > 0)) it.vy *= -0.55;
+      it.vx *= 0.94;
+      it.vy *= 0.94;
       it.tilt *= 0.87;
     } else {
       continue;
@@ -142,6 +202,14 @@ function frame() {
     it.scale += (targetScale - it.scale) * 0.2;
     it.el.style.transform =
       `translate3d(${it.dx}px, ${it.dy}px, 0) rotate(${it.rot + it.tilt}deg) scale(${it.scale.toFixed(3)})`;
+  }
+  if (!reduceMotion) {
+    for (const b of bits) {
+      const txp = mouse.x * b.depth, typ = mouse.y * b.depth;
+      b.x += (txp - b.x) * 0.06;
+      b.y += (typ - b.y) * 0.06;
+      b.el.style.transform = `translate3d(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px, 0)`;
+    }
   }
   requestAnimationFrame(frame);
 }
@@ -204,7 +272,7 @@ avatar.addEventListener("click", () => {
   const rect = avatar.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
   const cy = rect.top + rect.height / 2;
-  for (let i = 0; i < 26; i++) {
+  for (let i = 0; i < 28; i++) {
     const p = document.createElement("div");
     p.className = "confetti";
     p.style.background = COLORS[(Math.random() * COLORS.length) | 0];
@@ -228,7 +296,7 @@ avatar.addEventListener("click", () => {
     const note = document.createElement("div");
     note.className = "handwritten";
     note.style.cssText =
-      "position:fixed;left:50%;top:12%;transform:translateX(-50%) rotate(-2deg);font-size:1.7rem;z-index:99;";
+      "position:fixed;left:50%;top:12%;transform:translateX(-50%) rotate(-2deg);font-size:1.7rem;z-index:99;color:#ff6b57;";
     note.textContent = "okay okay, that's enough dopamine 😄";
     document.body.appendChild(note);
     setTimeout(() => note.remove(), 2600);
