@@ -1,4 +1,4 @@
-/* tairqaldy.xyz v2 — orchestrated load, smooth sticker physics, small delights */
+/* tairqaldy.xyz v3 — poster layout, sticker chips, spring physics */
 
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const COLORS = ["#00afca", "#ffc93c", "#ff6b57"];
@@ -15,37 +15,13 @@ setInterval(tick, 1000);
 
 // ---------- staggered reveal ----------
 document.querySelectorAll(".reveal").forEach((el, i) => {
-  el.style.setProperty("--d", `${Math.min(0.1 + i * 0.07, 1.1)}s`);
+  el.style.setProperty("--d", `${Math.min(0.08 + i * 0.06, 0.9)}s`);
 });
 
 addEventListener("load", () => {
   requestAnimationFrame(() => document.body.classList.add("loaded"));
 });
-// fallback in case load hangs on a slow font
 setTimeout(() => document.body.classList.add("loaded"), 1800);
-
-// ---------- name scramble on hover ----------
-const GLYPHS = "!<>-_/[]{}=+*^?#абвгдқң";
-document.querySelectorAll("#name .wi").forEach((span) => {
-  const original = span.textContent;
-  let busy = false;
-  span.parentElement.addEventListener("pointerenter", () => {
-    if (busy || reduceMotion) return;
-    busy = true;
-    let frame = 0;
-    const iv = setInterval(() => {
-      span.textContent = original
-        .split("")
-        .map((ch, idx) => (idx < frame ? original[idx] : GLYPHS[(Math.random() * GLYPHS.length) | 0]))
-        .join("");
-      if (frame++ >= original.length) {
-        clearInterval(iv);
-        span.textContent = original;
-        busy = false;
-      }
-    }, 34);
-  });
-});
 
 // ---------- marquee ----------
 const words = [
@@ -56,39 +32,59 @@ const words = [
 const half = words.map((w) => `<span>${w}</span><span class="sep">✦</span>`).join("");
 document.getElementById("marquee-track").innerHTML = half + half;
 
-// ---------- stickers: gutter layout + physics drag ----------
-// side: l/r · gx: 0..1 across the gutter · y: vh · w: px
-const STICKERS = [
-  { f: "sticker-31.png", side: "l", gx: 0.42, y: 8,  w: 96 },  // KZ flag
-  { f: "sticker-04.png", side: "l", gx: 0.25, y: 24, w: 60 },  // YC
-  { f: "sticker-16.png", side: "l", gx: 0.55, y: 37, w: 112 }, // Claude
-  { f: "sticker-09.png", side: "l", gx: 0.35, y: 53, w: 104 }, // Linus quote
-  { f: "sticker-13.png", side: "l", gx: 0.6,  y: 70, w: 56 },  // Python
-  { f: "sticker-28.png", side: "l", gx: 0.4,  y: 84, w: 126 }, // SATHustle
-  { f: "sticker-07.png", side: "r", gx: 0.5,  y: 9,  w: 64 },  // Anthropic
-  { f: "sticker-05.png", side: "r", gx: 0.35, y: 23, w: 100 }, // Antler
-  { f: "sticker-01.png", side: "r", gx: 0.55, y: 38, w: 112 }, // Astana Hub
-  { f: "sticker-23.png", side: "r", gx: 0.4,  y: 54, w: 92 },  // n8n
-  { f: "sticker-29.png", side: "r", gx: 0.6,  y: 68, w: 54 },  // FL Studio
-  { f: "sticker-30.png", side: "r", gx: 0.42, y: 83, w: 104 }, // Vercel
-];
-const ROTS = [-7, 5, -4, 6, -9, 4, 8, -5, 4, -6, 9, -3];
+// ---------- sticker chips ----------
+const KZ_FLAG = `<svg class="flag" width="52" height="34" viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg">
+  <rect width="52" height="34" rx="5" fill="#00afca"/>
+  <circle cx="26" cy="15" r="6.2" fill="#ffec3e"/>
+  <g stroke="#ffec3e" stroke-width="1.6" stroke-linecap="round">
+    <line x1="26" y1="4.5" x2="26" y2="6.8"/><line x1="26" y1="23.2" x2="26" y2="25.5"/>
+    <line x1="15.5" y1="15" x2="17.8" y2="15"/><line x1="34.2" y1="15" x2="36.5" y2="15"/>
+    <line x1="18.6" y1="7.6" x2="20.2" y2="9.2"/><line x1="31.8" y1="20.8" x2="33.4" y2="22.4"/>
+    <line x1="33.4" y1="7.6" x2="31.8" y2="9.2"/><line x1="20.2" y1="20.8" x2="18.6" y2="22.4"/>
+  </g>
+  <g fill="#ffec3e"><circle cx="6" cy="6" r="1.1"/><circle cx="6" cy="12" r="1.1"/><circle cx="6" cy="18" r="1.1"/><circle cx="6" cy="24" r="1.1"/><circle cx="6" cy="30" r="1.1" opacity="0"/></g>
+</svg>`;
 
-const CONTENT_W = 680;
+// type: logo (svg file) | text | brand (serif wordmark) | flag
+const STICKERS = [
+  { type: "flag", lbl: "qazaqstan", side: "l", gx: 0.42, y: 9 },
+  { type: "logo", slug: "claude", lbl: "claude", size: 30, side: "l", gx: 0.5, y: 26 },
+  { type: "logo", slug: "ycombinator", size: 34, side: "l", gx: 0.3, y: 41 },
+  { type: "text", html: "&ldquo;talk is cheap,<br>show me the code&rdquo;", side: "l", gx: 0.5, y: 57 },
+  { type: "logo", slug: "python", size: 30, side: "l", gx: 0.62, y: 73 },
+  { type: "brand", html: "SATHustle", lbl: "sat prep 1v1", side: "l", gx: 0.38, y: 86 },
+  { type: "logo", slug: "anthropic", lbl: "anthropic", size: 26, side: "r", gx: 0.5, y: 10 },
+  { type: "logo", slug: "vercel", lbl: "vercel", size: 26, side: "r", gx: 0.36, y: 26 },
+  { type: "logo", slug: "n8n", size: 34, side: "r", gx: 0.56, y: 41 },
+  { type: "text", html: "&#127818; fl studio<br>certified fruit", side: "r", gx: 0.42, y: 56 },
+  { type: "logo", slug: "react", size: 32, side: "r", gx: 0.6, y: 71 },
+  { type: "logo", slug: "cloudflare", size: 34, side: "r", gx: 0.4, y: 85 },
+];
+const ROTS = [-7, 5, -4, 6, -8, 4, 7, -5, 4, -6, 8, -3];
+
+function chipHTML(s) {
+  if (s.type === "flag") return KZ_FLAG + (s.lbl ? `<span class="lbl">${s.lbl}</span>` : "");
+  if (s.type === "logo")
+    return `<img src="assets/logos/${s.slug}.svg" width="${s.size}" height="${s.size}" alt="" draggable="false">` +
+           (s.lbl ? `<span class="lbl">${s.lbl}</span>` : "");
+  if (s.type === "brand") return s.html + (s.lbl ? `<span class="lbl">${s.lbl}</span>` : "");
+  return s.html;
+}
+
+const CONTENT_W = 720;
 const zone = document.getElementById("stickers");
 const items = [];
 
 STICKERS.forEach((s, i) => {
   const el = document.createElement("div");
-  el.className = "sticker";
-  el.style.width = s.w + "px";
+  el.className = "sticker" + (s.type === "text" ? " text" : "") + (s.type === "brand" ? " brand" : "");
   el.style.setProperty("--rot", ROTS[i] + "deg");
-  el.style.setProperty("--td", 0.7 + i * 0.08 + "s");
-  el.innerHTML = `<img src="assets/stickers/${s.f}" alt="" draggable="false">`;
+  el.style.setProperty("--td", 0.55 + i * 0.07 + "s");
+  el.innerHTML = chipHTML(s);
   zone.appendChild(el);
   items.push({
     el, cfg: s, rot: ROTS[i],
-    dx: 0, dy: 0, tx: 0, ty: 0, vx: 0, vy: 0, tilt: 0,
+    dx: 0, dy: 0, tx: 0, ty: 0, vx: 0, vy: 0, tilt: 0, scale: 1,
     dragging: false, settled: false,
   });
   el.addEventListener("animationend", () => {
@@ -101,13 +97,13 @@ function layoutStickers() {
   const gutter = Math.max((innerWidth - CONTENT_W) / 2, 0);
   for (const it of items) {
     const { cfg, el } = it;
-    const w = cfg.w;
+    const w = el.offsetWidth || 80;
     let x;
     if (cfg.side === "l") {
-      x = Math.min(Math.max(gutter * cfg.gx - w / 2, 10), Math.max(gutter - w - 14, 10));
+      x = Math.min(Math.max(gutter * cfg.gx - w / 2, 12), Math.max(gutter - w - 16, 12));
     } else {
       const gx = innerWidth - gutter + gutter * cfg.gx - w / 2;
-      x = Math.max(Math.min(gx, innerWidth - w - 10), innerWidth - gutter + 14);
+      x = Math.max(Math.min(gx, innerWidth - w - 12), innerWidth - gutter + 16);
     }
     el.style.left = x + "px";
     el.style.top = (cfg.y / 100) * innerHeight + "px";
@@ -116,34 +112,36 @@ function layoutStickers() {
 layoutStickers();
 addEventListener("resize", layoutStickers);
 
-// launch the toss-in after the text reveal starts
 setTimeout(() => {
   items.forEach(({ el }) => el.classList.add("on"));
-}, reduceMotion ? 0 : 350);
+}, reduceMotion ? 0 : 300);
 
-// physics loop: lerp toward pointer while dragging, inertia after release
+// physics: lerp toward pointer while dragging, inertia + tilt decay after release
 function frame() {
   for (const it of items) {
     if (!it.settled) continue;
+    const targetScale = it.dragging ? 1.07 : 1;
+    const scaleMoving = Math.abs(it.scale - targetScale) > 0.002;
     if (it.dragging) {
-      const nx = it.dx + (it.tx - it.dx) * 0.32;
-      const ny = it.dy + (it.ty - it.dy) * 0.32;
+      const nx = it.dx + (it.tx - it.dx) * 0.3;
+      const ny = it.dy + (it.ty - it.dy) * 0.3;
       it.vx = nx - it.dx;
       it.vy = ny - it.dy;
       it.dx = nx;
       it.dy = ny;
-      it.tilt += ((Math.max(-16, Math.min(16, it.vx * 1.4)) - it.tilt) * 0.25);
-    } else if (Math.abs(it.vx) > 0.05 || Math.abs(it.vy) > 0.05 || Math.abs(it.tilt) > 0.1) {
+      it.tilt += (Math.max(-15, Math.min(15, it.vx * 1.3)) - it.tilt) * 0.22;
+    } else if (Math.abs(it.vx) > 0.04 || Math.abs(it.vy) > 0.04 || Math.abs(it.tilt) > 0.08 || scaleMoving) {
       it.dx += it.vx;
       it.dy += it.vy;
-      it.vx *= 0.92;
-      it.vy *= 0.92;
-      it.tilt *= 0.88;
+      it.vx *= 0.93;
+      it.vy *= 0.93;
+      it.tilt *= 0.87;
     } else {
       continue;
     }
+    it.scale += (targetScale - it.scale) * 0.2;
     it.el.style.transform =
-      `translate3d(${it.dx}px, ${it.dy}px, 0) rotate(${it.rot + it.tilt}deg)`;
+      `translate3d(${it.dx}px, ${it.dy}px, 0) rotate(${it.rot + it.tilt}deg) scale(${it.scale.toFixed(3)})`;
   }
   requestAnimationFrame(frame);
 }
@@ -176,14 +174,14 @@ items.forEach((it) => {
   el.addEventListener("pointercancel", release);
 });
 
-// occasional wiggle from a random untouched sticker
+// occasional wiggle from an untouched sticker
 if (!reduceMotion) {
   setInterval(() => {
     const still = items.filter((it) => it.settled && !it.dragging && Math.abs(it.dx) < 1 && Math.abs(it.dy) < 1);
     if (!still.length) return;
     const it = still[(Math.random() * still.length) | 0];
     it.el.classList.add("wiggle");
-    setTimeout(() => it.el.classList.remove("wiggle"), 550);
+    setTimeout(() => it.el.classList.remove("wiggle"), 600);
   }, 6500);
 }
 
@@ -191,10 +189,11 @@ if (!reduceMotion) {
 const strip = document.createElement("div");
 strip.className = "sticker-strip";
 strip.setAttribute("aria-hidden", "true");
-["sticker-31.png", "sticker-16.png", "sticker-04.png", "sticker-28.png", "sticker-29.png", "sticker-23.png"]
-  .forEach((f) => {
-    strip.innerHTML += `<span class="mini"><img src="assets/stickers/${f}" alt="" draggable="false"></span>`;
-  });
+strip.innerHTML =
+  `<span class="mini">${KZ_FLAG.replace('width="52" height="34"', 'width="26" height="17"')}</span>` +
+  ["claude", "ycombinator", "anthropic", "python", "n8n"]
+    .map((s) => `<span class="mini"><img src="assets/logos/${s}.svg" alt="" draggable="false"></span>`)
+    .join("");
 document.querySelector("footer").appendChild(strip);
 
 // ---------- avatar confetti ----------
