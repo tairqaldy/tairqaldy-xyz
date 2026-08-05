@@ -1,0 +1,374 @@
+/* tairqaldy.xyz — playful light editorial */
+
+:root {
+  --paper: #fbf7ef;
+  --ink: #1e1a15;
+  --ink-soft: #6b6257;
+  --teal: #00afca;      /* KZ flag turquoise */
+  --sun: #ffc93c;       /* KZ sun yellow */
+  --coral: #ff6b57;
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "Inter", system-ui, -apple-system, sans-serif;
+  --hand: "Caveat", cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+  overflow-x: hidden;
+  min-height: 100svh;
+  /* subtle paper dots */
+  background-image: radial-gradient(circle, rgba(30, 26, 21, 0.055) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+#bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------- stickers ---------- */
+
+#stickers {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.sticker {
+  position: absolute;
+  pointer-events: auto;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-drag: none;
+  touch-action: none;
+  background: #fff;
+  padding: 7px;
+  border-radius: 10px;
+  border: 1px solid rgba(30, 26, 21, 0.1);
+  box-shadow: 0 3px 14px rgba(30, 26, 21, 0.13);
+  transition: box-shadow 0.25s ease;
+  animation: bob var(--bob-dur, 5s) ease-in-out var(--bob-delay, 0s) infinite alternate;
+}
+
+.sticker img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+.sticker:hover {
+  box-shadow: 0 10px 26px rgba(30, 26, 21, 0.22);
+  animation-play-state: paused;
+}
+
+.sticker.dragging {
+  cursor: grabbing;
+  animation: none;
+  box-shadow: 0 16px 40px rgba(30, 26, 21, 0.28);
+  z-index: 60 !important;
+}
+
+@keyframes bob {
+  from { translate: 0 -7px; }
+  to   { translate: 0 7px; }
+}
+
+/* ---------- layout ---------- */
+
+main {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 9vh, 7rem) 1.4rem 6.5rem;
+}
+
+/* ---------- hero ---------- */
+
+.avatar-wrap {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 18px rgba(30, 26, 21, 0.18);
+  cursor: pointer;
+  margin-bottom: 1.1rem;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: var(--sun);
+}
+
+.avatar-wrap:hover { transform: scale(1.07) rotate(-4deg); }
+.avatar-wrap:active { transform: scale(0.94); }
+
+.avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatar-fallback {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+}
+
+.avatar-wrap.no-photo img { display: none; }
+.avatar-wrap.no-photo .avatar-fallback { display: flex; }
+
+.eyebrow {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.01em;
+}
+
+h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 9vw, 4.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: 0.15em 0 0.1em;
+  min-height: 1.05em;
+}
+
+h1 .cursor {
+  display: inline-block;
+  width: 3px;
+  height: 0.85em;
+  background: var(--teal);
+  margin-left: 4px;
+  vertical-align: -0.08em;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.handwritten {
+  font-family: var(--hand);
+  font-size: 1.45rem;
+  color: var(--teal);
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+.arrow-note { margin-top: 0.2rem; }
+
+/* ---------- bio ---------- */
+
+.bio { margin-top: 2.2rem; display: grid; gap: 1.25rem; }
+
+.bio p { font-size: 1.02rem; color: var(--ink-soft); }
+
+.bio strong { color: var(--ink); font-weight: 600; }
+
+mark {
+  background: linear-gradient(104deg, transparent 0.5%, var(--sun) 3%, var(--sun) 96%, transparent 99%);
+  padding: 0.05em 0.25em;
+  border-radius: 3px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  background-image: linear-gradient(var(--teal), var(--teal));
+  background-size: 100% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: color 0.2s ease, background-size 0.2s ease;
+}
+
+a:hover { color: var(--teal); background-size: 100% 100%; }
+
+.bio a:hover, .cta a:hover {
+  color: var(--ink);
+  background-image: linear-gradient(rgba(0, 175, 202, 0.25), rgba(0, 175, 202, 0.25));
+}
+
+.cta { font-size: 1.08rem; }
+.cta a { color: var(--coral); background-image: linear-gradient(var(--coral), var(--coral)); }
+
+/* ---------- building chips ---------- */
+
+.building { margin-top: 2.6rem; }
+
+.building h2 { margin-bottom: 0.7rem; font-weight: 600; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+.chip {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  padding: 0.5rem 0.95rem;
+  background: #fff;
+  border: 1.5px solid var(--ink);
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+  box-shadow: 2.5px 2.5px 0 var(--ink);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s;
+  background-image: none;
+}
+
+.chip span {
+  font-size: 0.74rem;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.chip:hover {
+  transform: translate(-2px, -2px) rotate(-1deg);
+  box-shadow: 4.5px 4.5px 0 var(--teal);
+  color: var(--ink);
+  background: #fff;
+}
+
+a.chip:hover { background: #fffdf5; }
+
+.chip.ghost {
+  border-style: dashed;
+  box-shadow: none;
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.chip.ghost:hover { transform: rotate(1deg); box-shadow: none; }
+
+/* ---------- meta + links ---------- */
+
+.meta-line {
+  margin-top: 2.4rem;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.meta-line .dot { color: var(--teal); }
+
+#clock { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink); }
+
+.links {
+  margin-top: 1.4rem;
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1.5px solid rgba(30, 26, 21, 0.14);
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.18s, background 0.18s;
+  background-image: none;
+}
+
+.links a svg { width: 19px; height: 19px; fill: var(--ink); transition: fill 0.18s; }
+
+.links a:hover {
+  transform: translateY(-4px) rotate(-3deg);
+  border-color: var(--teal);
+  background: #fff;
+}
+
+.links a:hover svg { fill: var(--teal); }
+
+.footer-note { margin-top: 2rem; color: var(--coral); font-size: 1.3rem; }
+
+/* ---------- marquee ---------- */
+
+.marquee {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  background: var(--ink);
+  color: var(--paper);
+  overflow: hidden;
+  padding: 0.42rem 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: scroll 40s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track span { padding: 0 1.1rem; }
+.marquee-track .sep { color: var(--sun); }
+
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+@keyframes scroll {
+  to { transform: translateX(-50%); }
+}
+
+/* ---------- entrance animation ---------- */
+
+.fade-item {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes rise {
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- confetti bits ---------- */
+
+.confetti {
+  position: fixed;
+  width: 9px;
+  height: 9px;
+  z-index: 99;
+  pointer-events: none;
+  border-radius: 2px;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 960px) {
+  .sticker.side { display: none; }
+  .sticker { animation-duration: 7s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticker, .marquee-track { animation: none !important; }
+  .fade-item { animation-duration: 0.01s; }
+}
