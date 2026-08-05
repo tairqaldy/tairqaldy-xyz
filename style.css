@@ -1,4 +1,4 @@
-/* tairqaldy.xyz — playful light editorial, v4 (more life) */
+/* tairqaldy.xyz — playful light editorial, v5 (chaos-ready) */
 
 :root {
   --paper: #fbf6ec;
@@ -16,7 +16,7 @@
   --hand: "Caveat", cursive;
   --pop: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --gap: clamp(1.1rem, 3svh, 2.6rem);
+  --gap: clamp(0.85rem, 2.5svh, 2.4rem);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -66,10 +66,7 @@ body::after {
 /* floating confetti bits behind content */
 #bits { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
 
-.bit {
-  position: absolute;
-  will-change: transform;
-}
+.bit { position: absolute; will-change: transform; }
 
 .bit > svg {
   display: block;
@@ -112,6 +109,25 @@ body::after {
 
 .site-tag:hover { transform: rotate(2deg) scale(1.12); color: var(--violet); }
 
+/* chaos button */
+.chaos-btn {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 2.7rem;
+  z-index: 60;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: var(--coral);
+  transform: rotate(2deg);
+  transition: transform 0.25s var(--pop), color 0.2s;
+}
+
+.chaos-btn:hover { transform: rotate(-3deg) scale(1.15); }
+
+.chaos-btn.armed { color: var(--leaf); }
+
 /* ---------- layout ---------- */
 
 main {
@@ -119,13 +135,17 @@ main {
   z-index: 2;
   width: min(100%, 720px);
   margin: 0 auto;
-  padding: clamp(1.2rem, 3svh, 2.2rem) 1.5rem calc(clamp(0.8rem, 2svh, 1.6rem) + 2rem);
+  padding: clamp(1rem, 2.4svh, 2rem) 1.5rem calc(clamp(0.6rem, 1.5svh, 1.4rem) + 1.9rem);
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: var(--gap);
 }
+
+/* loose (chaos) pieces */
+.loose { cursor: grab; }
+.loose:active { cursor: grabbing; }
 
 /* ---------- hero ---------- */
 
@@ -135,8 +155,8 @@ main {
 
 .avatar-wrap {
   position: relative;
-  width: clamp(70px, 11svh, 100px);
-  height: clamp(70px, 11svh, 100px);
+  width: clamp(62px, 10svh, 96px);
+  height: clamp(62px, 10svh, 96px);
   border-radius: 50%;
   border: 3px solid #fff;
   box-shadow: 0 6px 22px rgba(34, 28, 19, 0.18);
@@ -178,24 +198,41 @@ main {
 .avatar-note {
   position: absolute;
   left: 50%;
-  bottom: -1.5rem;
+  bottom: -1.4rem;
   translate: -50% 0;
   white-space: nowrap;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--coral);
   rotate: -5deg;
   opacity: 0.85;
 }
 
-.eyebrow { font-size: 1.12rem; font-style: italic; color: var(--ink-soft); }
+/* dopamine bubble (5-click easter egg) */
+.bubble {
+  position: fixed;
+  z-index: 99;
+  padding: 0.4rem 0.8rem;
+  background: #fff;
+  border: 1.5px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 2.5px 2.5px 0 var(--coral);
+  font-family: var(--hand);
+  font-size: 1.25rem;
+  color: var(--ink);
+  rotate: -3deg;
+  pointer-events: none;
+  white-space: nowrap;
+}
 
-/* name: static first name with wavy letters + rolling surname */
+.eyebrow { font-size: 1.1rem; font-style: italic; color: var(--ink-soft); }
+
+/* name */
 h1 {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
   column-gap: 0.32em;
-  font-size: clamp(2.1rem, 6vw, 3.6rem);
+  font-size: clamp(2rem, 5.8vw, 3.4rem);
   font-weight: 900;
   font-style: italic;
   line-height: 1.1;
@@ -231,7 +268,7 @@ body.loaded h1:hover .roll .a { transform: translateY(115%); transition-delay: 0
 body.loaded h1:hover .roll .b { transform: none; }
 
 .aka {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 600;
   font-style: normal;
   color: var(--coral);
@@ -243,7 +280,7 @@ body.loaded h1:hover .roll .b { transform: none; }
 
 h1:hover .aka { opacity: 1; translate: 0 0; }
 
-.role { margin-top: 0.45rem; color: var(--ink-soft); text-transform: lowercase; }
+.role { margin-top: 0.35rem; color: var(--ink-soft); text-transform: lowercase; }
 
 .d { font-weight: 700; }
 .d1 { color: var(--teal); }
@@ -252,15 +289,20 @@ h1:hover .aka { opacity: 1; translate: 0 0; }
 
 /* ---------- story prose ---------- */
 
-.story { display: grid; gap: clamp(0.7rem, 2svh, 1.1rem); }
+.story { display: grid; gap: clamp(0.5rem, 1.5svh, 1rem); }
 
 .story p {
-  font-size: clamp(0.98rem, 2.1svh, 1.12rem);
-  line-height: 1.55;
+  font-size: clamp(0.92rem, 2svh, 1.1rem);
+  line-height: 1.5;
   color: var(--ink-soft);
 }
 
 .story strong { color: var(--ink); font-weight: 600; }
+
+/* scribbly underlines */
+.wavy-teal  { text-decoration: underline wavy var(--teal) 1.5px; text-underline-offset: 4px; }
+.wavy-coral { text-decoration: underline wavy var(--coral) 1.5px; text-underline-offset: 4px; }
+.wavy-sun   { text-decoration: underline wavy var(--sun-deep) 1.5px; text-underline-offset: 4px; }
 
 mark {
   padding: 0.02em 0.28em;
@@ -272,9 +314,33 @@ mark {
 .m-sun { background: linear-gradient(104deg, transparent 0.5%, var(--sun) 3%, var(--sun) 96%, transparent 99%); }
 .m-coral { background: linear-gradient(104deg, transparent 0.5%, rgba(255, 107, 87, 0.5) 3%, rgba(255, 107, 87, 0.5) 96%, transparent 99%); }
 
+/* hand-drawn ring around €13k, draws itself on load */
+.circled { position: relative; white-space: nowrap; }
+
+.circled .ring {
+  position: absolute;
+  inset: -0.42em -0.55em -0.48em;
+  width: calc(100% + 1.1em);
+  height: calc(100% + 0.9em);
+  pointer-events: none;
+  overflow: visible;
+}
+
+.circled .ring path {
+  stroke: var(--coral);
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+}
+
+body.loaded .circled .ring path {
+  animation: draw 1s var(--ease-out) 1.15s forwards;
+}
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
 a { color: inherit; text-decoration: none; }
 
-/* project links in prose: each its own color, fills on hover */
+/* project links: colored underline that fills up on hover */
 .pl {
   font-weight: 600;
   color: var(--ink);
@@ -286,24 +352,22 @@ a { color: inherit; text-decoration: none; }
 .pl-teal:hover { box-shadow: inset 0 -1.25em 0 rgba(0, 175, 202, 0.28); }
 .pl-coral { box-shadow: inset 0 -2px 0 var(--coral); }
 .pl-coral:hover { box-shadow: inset 0 -1.25em 0 rgba(255, 107, 87, 0.26); }
-
-.qai { box-shadow: inset 0 -2px 0 var(--violet); padding: 0 0.12em; }
+.pl-violet { box-shadow: inset 0 -2px 0 var(--violet); }
+.pl-violet:hover { box-shadow: inset 0 -1.25em 0 rgba(155, 107, 255, 0.24); }
 
 /* ---------- shelf ---------- */
 
-.shelfwrap { position: relative; }
-
 .shelf-note {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   color: var(--violet);
   rotate: -2deg;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 
 .shelf {
   display: flex;
   align-items: flex-start;
-  gap: 0.85rem;
+  gap: 0.8rem;
   flex-wrap: wrap;
 }
 
@@ -311,8 +375,8 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.1rem;
-  padding: 0.55rem 1rem 0.4rem;
+  gap: 0.08rem;
+  padding: clamp(0.4rem, 1.2svh, 0.55rem) 1rem clamp(0.3rem, 1svh, 0.4rem);
   background: rgba(255, 255, 255, 0.85);
   border: 1.5px solid var(--ink);
   border-radius: 13px;
@@ -341,17 +405,17 @@ a { color: inherit; text-decoration: none; }
 .t-coral:hover  { box-shadow: 5px 6px 0 var(--coral); }
 .t-sun:hover    { box-shadow: 5px 6px 0 var(--sun-deep); }
 
-.thing-name { font-size: 1.06rem; font-weight: 600; font-style: italic; }
+.thing-name { font-size: 1.02rem; font-weight: 600; font-style: italic; }
 
-.thing-status { font-size: 1.05rem; }
+.thing-status { font-size: 1rem; }
 .t-teal .thing-status   { color: var(--teal); }
 .t-violet .thing-status { color: var(--violet); }
 .t-coral .thing-status  { color: var(--coral); }
 .t-sun .thing-status    { color: var(--sun-deep); }
 
-.next-note { align-self: center; font-size: 1.2rem; color: var(--ink-soft); rotate: 2deg; }
+.next-note { align-self: center; font-size: 1.15rem; color: var(--ink-soft); rotate: 2deg; }
 
-/* ---------- footer: where, cta, socials ---------- */
+/* ---------- footer ---------- */
 
 .where {
   display: flex;
@@ -359,7 +423,7 @@ a { color: inherit; text-decoration: none; }
   gap: 0.5rem;
   flex-wrap: wrap;
   color: var(--ink-soft);
-  margin-bottom: clamp(0.6rem, 1.6svh, 1rem);
+  margin-bottom: clamp(0.45rem, 1.3svh, 0.9rem);
 }
 
 .pin { color: var(--coral); }
@@ -377,7 +441,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .cta-line {
-  font-size: clamp(1.3rem, 3.1svh, 1.7rem);
+  font-size: clamp(1.2rem, 2.9svh, 1.6rem);
   font-weight: 600;
   font-style: italic;
   line-height: 1.3;
@@ -392,16 +456,12 @@ a { color: inherit; text-decoration: none; }
 
 .cta-line a:hover { box-shadow: inset 0 -1.15em 0 rgba(255, 107, 87, 0.2); }
 
-.cta-note { font-size: 1.2rem; color: var(--coral); rotate: -2deg; margin-left: 0.4rem; }
+.cta-note { font-size: 1.15rem; color: var(--coral); rotate: -2deg; margin-left: 0.4rem; }
 
-/* socials: bare icons, each brand color + bounce on hover */
+/* socials */
 .links { display: flex; gap: 0.9rem; align-items: center; }
 
-.links a {
-  display: inline-flex;
-  padding: 0.2rem;
-  transition: transform 0.25s var(--pop);
-}
+.links a { display: inline-flex; padding: 0.2rem; transition: transform 0.25s var(--pop); }
 
 .links a svg { width: 20px; height: 20px; fill: #a89d8d; transition: fill 0.2s, transform 0.25s var(--pop); }
 
@@ -522,13 +582,6 @@ a { color: inherit; text-decoration: none; }
   z-index: 45;
 }
 
-.sticker.wiggle { animation: wiggle 0.55s ease-in-out; }
-
-@keyframes wiggle {
-  25% { transform: rotate(calc(var(--rot) + 5deg)) scale(1.05); }
-  75% { transform: rotate(calc(var(--rot) - 4deg)) scale(1.02); }
-}
-
 /* mobile sticker strip */
 .sticker-strip { display: none; gap: 0.55rem; margin-top: 0.9rem; flex-wrap: wrap; }
 
@@ -563,16 +616,16 @@ a { color: inherit; text-decoration: none; }
 
 body.loaded .reveal { opacity: 1; transform: none; }
 
-/* ---------- confetti ---------- */
+/* ---------- confetti particles ---------- */
 
-.confetti {
+.confetti-bit {
   position: fixed;
-  width: 9px;
-  height: 9px;
   z-index: 99;
   pointer-events: none;
-  border-radius: 2px;
+  will-change: transform, opacity;
 }
+
+.confetti-bit svg { display: block; }
 
 /* ---------- responsive ---------- */
 
@@ -587,8 +640,9 @@ body.loaded .reveal { opacity: 1; transform: none; }
   .aka { display: none; }
   .avatar-note { display: none; }
   .site-tag { font-size: 1.1rem; }
+  .chaos-btn { font-size: 1.1rem; bottom: 2.4rem; }
   .shelf { gap: 0.55rem; }
-  .thing { padding: 0.45rem 0.75rem 0.35rem; }
+  .thing { padding: 0.4rem 0.75rem 0.3rem; }
   .cta-row { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
 }
 
