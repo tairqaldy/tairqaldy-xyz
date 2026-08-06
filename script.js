@@ -46,7 +46,7 @@ const words = [
   "obsessed", "ship &gt; talk", "adhd is a feature", "20+ fails, still here",
   "build in public", "салем әлем", "astana standard time", "18 &amp; shipping",
   "talk is cheap, show me the code", "drag the stickers", "there is a chaos button",
-  "&copy; 2026 tair qaldybayev", "made with stickers &amp; adhd energy",
+  "&copy; 2026 tair kaldybayev", "made with stickers &amp; adhd energy",
 ];
 const half = words.map((w) => `<span>${w}</span><span class="sep">✦</span>`).join("");
 document.getElementById("marquee-track").innerHTML = half + half;
@@ -222,7 +222,7 @@ setTimeout(() => {
   items.forEach((it) => it.kind === "sticker" && it.el.classList.add("on"));
 }, reduceMotion ? 0 : 300);
 
-// ---------- collisions: soft circles, dragged items have infinite mass ----------
+// ---------- collisions: exact visual rectangles, dragged items have infinite mass ----------
 function collide() {
   for (let i = 0; i < items.length; i++) {
     const A = items[i];
@@ -230,29 +230,31 @@ function collide() {
     for (let j = i + 1; j < items.length; j++) {
       const B = items[j];
       if (!B.settled || !B.active) continue;
-      const ax = A.hx + A.dx + A.w / 2, ay = A.hy + A.dy + A.h / 2;
-      const bx = B.hx + B.dx + B.w / 2, by = B.hy + B.dy + B.h / 2;
-      const rA = Math.max(A.w, A.h) * 0.52, rB = Math.max(B.w, B.h) * 0.52;
-      let nx = bx - ax, ny = by - ay;
-      const dist = Math.hypot(nx, ny) || 0.01;
-      const overlap = rA + rB - dist;
-      if (overlap <= 0) continue;
-      nx /= dist; ny /= dist;
-      const push = overlap * 0.5;
+      const ax1 = A.hx + A.dx, ay1 = A.hy + A.dy, ax2 = ax1 + A.w, ay2 = ay1 + A.h;
+      const bx1 = B.hx + B.dx, by1 = B.hy + B.dy, bx2 = bx1 + B.w, by2 = by1 + B.h;
+      const ox = Math.min(ax2, bx2) - Math.max(ax1, bx1);
+      const oy = Math.min(ay2, by2) - Math.max(ay1, by1);
+      if (ox <= 0 || oy <= 0) continue;
+      // separate along the shallow axis so boxes touch, never explode
+      let nx = 0, ny = 0, depth;
+      if (ox < oy) { depth = ox; nx = ax1 + ax2 < bx1 + bx2 ? 1 : -1; }
+      else { depth = oy; ny = ay1 + ay2 < by1 + by2 ? 1 : -1; }
+      const imp = Math.min(depth, 12) * 0.14;
       const aFree = !A.dragging, bFree = !B.dragging;
       if (aFree && bFree) {
-        A.dx -= nx * push; A.dy -= ny * push;
-        B.dx += nx * push; B.dy += ny * push;
-        A.vx -= nx * push * 0.18; A.vy -= ny * push * 0.18;
-        B.vx += nx * push * 0.18; B.vy += ny * push * 0.18;
+        const half = depth / 2;
+        A.dx -= nx * half; A.dy -= ny * half;
+        B.dx += nx * half; B.dy += ny * half;
+        A.vx -= nx * imp; A.vy -= ny * imp;
+        B.vx += nx * imp; B.vy += ny * imp;
       } else if (aFree) {
-        A.dx -= nx * overlap; A.dy -= ny * overlap;
-        A.vx -= nx * overlap * 0.25; A.vy -= ny * overlap * 0.25;
-        A.tilt += (Math.random() - 0.5) * 4;
+        A.dx -= nx * depth; A.dy -= ny * depth;
+        A.vx -= nx * imp * 2; A.vy -= ny * imp * 2;
+        A.tilt += nx * 1.5;
       } else if (bFree) {
-        B.dx += nx * overlap; B.dy += ny * overlap;
-        B.vx += nx * overlap * 0.25; B.vy += ny * overlap * 0.25;
-        B.tilt += (Math.random() - 0.5) * 4;
+        B.dx += nx * depth; B.dy += ny * depth;
+        B.vx += nx * imp * 2; B.vy += ny * imp * 2;
+        B.tilt += nx * 1.5;
       }
     }
   }
@@ -325,15 +327,14 @@ function makeLoose(el) {
   el.style.cssText = saved +
     `;position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;margin:0;z-index:33;transition:none;`;
   el.classList.add("loose");
-  const it = makeItem(el, "piece", (Math.random() - 0.5) * 4);
+  // pieces come loose in place — a slight tilt says "grab me", the user makes the mess
+  const it = makeItem(el, "piece", (Math.random() - 0.5) * 3);
   it.hx = r.left;
   it.hy = r.top;
   it.w = r.width;
   it.h = r.height;
   it.settled = true;
-  it.vx = (Math.random() - 0.5) * 7;
-  it.vy = (Math.random() - 0.5) * 7;
-  it.tilt = (Math.random() - 0.5) * 10;
+  it.bobAmp = 1.5;
   loosened.push({ el, ph, saved, it });
 }
 
@@ -343,7 +344,7 @@ chaosBtn.addEventListener("click", () => {
     chaosBtn.textContent = "okay fix this mess →";
     chaosBtn.classList.add("armed");
     const targets = document.querySelectorAll(
-      ".eyebrow, #name, .role, .story p, .shelf-note, .thing, .next-note, .where, .cta-line, .links"
+      ".site-tag, .avatar-col, .eyebrow, #name, .role, .story p, .shelf-note, .thing, .next-note, .where, .cta-line, .links"
     );
     targets.forEach((el) => makeLoose(el));
   } else {

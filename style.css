@@ -232,11 +232,12 @@ h1 {
   align-items: baseline;
   flex-wrap: wrap;
   column-gap: 0.32em;
-  font-size: clamp(2rem, 5.8vw, 3.4rem);
-  font-weight: 900;
-  font-style: italic;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
+  font-family: "Bricolage Grotesque", "Fraunces", Georgia, serif;
+  font-size: clamp(2rem, 5.6vw, 3.3rem);
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1.08;
+  letter-spacing: -0.028em;
   margin: 0.04em 0 0.05em;
   cursor: default;
 }
@@ -247,8 +248,8 @@ h1 {
 }
 
 .first .ltr.up { transform: translateY(-0.14em) rotate(-4deg); }
-.first .ltr.up:nth-child(odd) { color: var(--teal); }
-.first .ltr.up:nth-child(even) { color: var(--coral); }
+.first .ltr.up:nth-child(odd) { color: var(--leaf); }
+.first .ltr.up:nth-child(even) { color: var(--teal); }
 
 .roll { display: inline-grid; overflow: hidden; }
 
@@ -260,7 +261,7 @@ h1 {
   transition: transform 0.6s var(--pop);
 }
 
-.roll .b { transform: translateY(-115%); color: var(--teal); }
+.roll .b { transform: translateY(-115%); color: var(--leaf); }
 
 body.loaded .roll .a { transform: none; transition-delay: 0.15s; }
 
@@ -268,10 +269,11 @@ body.loaded h1:hover .roll .a { transform: translateY(115%); transition-delay: 0
 body.loaded h1:hover .roll .b { transform: none; }
 
 .aka {
+  font-family: var(--hand);
   font-size: 1.2rem;
   font-weight: 600;
   font-style: normal;
-  color: var(--coral);
+  color: var(--leaf);
   rotate: -2deg;
   opacity: 0;
   translate: 0 6px;
@@ -354,6 +356,8 @@ a { color: inherit; text-decoration: none; }
 .pl-coral:hover { box-shadow: inset 0 -1.25em 0 rgba(255, 107, 87, 0.26); }
 .pl-violet { box-shadow: inset 0 -2px 0 var(--violet); }
 .pl-violet:hover { box-shadow: inset 0 -1.25em 0 rgba(155, 107, 255, 0.24); }
+.pl-sun { box-shadow: inset 0 -2px 0 var(--sun-deep); }
+.pl-sun:hover { box-shadow: inset 0 -1.25em 0 rgba(255, 201, 60, 0.38); }
 
 /* ---------- shelf ---------- */
 
