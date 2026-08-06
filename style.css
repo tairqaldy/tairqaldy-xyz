@@ -359,6 +359,8 @@ a { color: inherit; text-decoration: none; }
 .pl-sun { box-shadow: inset 0 -2px 0 var(--sun-deep); }
 .pl-sun:hover { box-shadow: inset 0 -1.25em 0 rgba(255, 201, 60, 0.38); }
 
+.soon-note { font-size: 1.05rem; color: var(--teal); rotate: -2deg; }
+
 /* ---------- shelf ---------- */
 
 .shelf-note {
