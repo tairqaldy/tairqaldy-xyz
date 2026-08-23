@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <title>Tair Kaldybayev</title>
+    <meta name="description" content="AI engineer and founder. One card, off-white, watermarked." />
+    <meta name="theme-color" content="#0E0F12" />
+    <meta name="color-scheme" content="dark" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tair Kaldybayev" />
+    <meta property="og:description" content="AI engineer and founder. One card, off-white, watermarked." />
+    <meta property="og:image" content="/american-psycho/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tair Kaldybayev" />
+    <meta name="twitter:description" content="AI engineer and founder. One card, off-white, watermarked." />
+    <meta name="twitter:image" content="/american-psycho/og.png" />
+
+    <link rel="icon" href="/american-psycho/favicon.svg" type="image/svg+xml" />
+
+    <!-- Self-hosted, latin subset. Preloaded so type never swaps mid-reveal. -->
+    <link
+      rel="preload"
+      href="/american-psycho/fonts/cormorant-garamond-300-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/american-psycho/fonts/eb-garamond-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="preload" href="/american-psycho/media/office-plate.jpg" as="image" />
+
+    <script type="module" crossorigin src="/american-psycho/assets/index-C55fyS6_.js"></script>
+    <link rel="stylesheet" crossorigin href="/american-psycho/assets/style-DKvbEZ5T.css">
+  </head>
+
+  <!-- data-state is the only thing JS toggles on <body>:
+       boot | gate | film | reveal | settle | idle -->
+  <body data-state="boot">
+    <a class="skip-link" href="#card-figure">Skip to the card</a>
+
+    <main class="stage">
+      <!-- The room. Original footage, shot for this page: an empty boardroom
+           table at dusk. The film hands over to a defocused still of its own
+           last frame once the card takes the centre. -->
+      <div class="scene" aria-hidden="true">
+        <!-- src is assigned by main.js, never here: a repeat visit, a
+             reduced-motion visitor, or the OG renderer must never pay 3.5 MB
+             for a film they are not going to watch. -->
+        <video
+          class="scene__film"
+          id="film"
+          playsinline
+          preload="auto"
+          disablepictureinpicture
+          poster="/american-psycho/media/office-poster.jpg"
+          data-src="/media/scene.mp4"
+        ></video>
+        <div class="scene__plate"></div>
+        <div class="scene__grade"></div>
+      </div>
+
+      <div class="table">
+        <!-- Decoy cards. Deliberately unreadable: geometry only, no words, ever. -->
+        <div class="deck" id="deck" aria-hidden="true"></div>
+
+        <figure class="card-wrap" id="card-figure">
+          <div class="card-cast" aria-hidden="true"></div>
+
+          <div class="card" id="card">
+            <!-- Flattened layer: stock, texture, watermark, glare. Clipped to the card. -->
+            <div class="card__stock" aria-hidden="true">
+              <span class="card__mottle"></span>
+              <span class="card__grain"></span>
+              <span class="card__sheen"></span>
+              <span class="card__bounce"></span>
+              <span class="card__monogram" data-card="monogram"></span>
+              <span class="card__grade"></span>
+              <span class="card__glare"></span>
+            </div>
+
+            <!-- 3D layer: the printed matter, parallaxing above the stock. -->
+            <div class="card__content" aria-hidden="true">
+              <div class="layer layer--head">
+                <p class="card__name" data-card="name"></p>
+                <p class="card__title" data-card="title"></p>
+              </div>
+              <div class="layer layer--rule"><span class="card__rule"></span></div>
+              <div class="layer layer--details">
+                <ul class="card__details" data-card="details"></ul>
+              </div>
+              <div class="layer layer--mark">
+                <span class="card__mark" data-card="mark"></span>
+              </div>
+            </div>
+          </div>
+
+          <figcaption class="visually-hidden" data-card="caption"></figcaption>
+        </figure>
+      </div>
+
+      <p class="caption" id="caption" aria-live="polite" aria-atomic="true">
+        <span class="caption__line" id="caption-line"></span>
+      </p>
+
+      <nav class="contact" id="contact" aria-label="Contact"></nav>
+    </main>
+
+    <!-- The gate. Browsers block autoplay; the click is the permission grant. -->
+    <section class="gate" id="gate">
+      <p class="gate__line">Let's see Paul Allen's card.</p>
+      <button class="gate__button" id="gate-button" type="button">
+        <span class="gate__button-label">Play</span>
+      </button>
+      <p class="gate__note" id="gate-note">Sound on.</p>
+    </section>
+
+    <button class="corner corner--skip" id="skip" type="button" hidden>Skip</button>
+    <button class="corner corner--replay" id="replay" type="button" hidden>Replay</button>
+    <button class="corner corner--sound" id="soundcheck" type="button" hidden>Play voiceover</button>
+
+    <div class="crossfade" id="crossfade" aria-hidden="true"></div>
+
+    <audio id="vo" preload="auto">
+      <source src="/american-psycho/audio/vo.m4a" type="audio/mp4" />
+    </audio>
+
+    <!--
+      No-JS fallback only. The live card is rendered from the CARD object in
+      src/main.js — that is the single place to edit these details.
+    -->
+    <noscript>
+      <div class="noscript-card">
+        <h1>Tair Kaldybayev</h1>
+        <p>AI Engineer &amp; Founder</p>
+        <p>Qaldy AI &middot; Astana, KZ</p>
+        <p>
+          <a href="https://tairqaldy.xyz" rel="noopener">tairqaldy.xyz</a> &middot;
+          <a href="https://github.com/tairqaldy" rel="noopener">github.com/tairqaldy</a>
+        </p>
+      </div>
+    </noscript>
+  </body>
+</html>
