@@ -1,153 +1,127 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tair Kaldybayev — building things from Astana</title>
+  <meta name="description" content="18 y.o. founder from Kazakhstan. €13k invested in WordFactory in the Netherlands, now in Astana building sof.kz, SATHustle and Qaldy AI. 20+ dead projects, still shipping.">
+  <meta property="og:title" content="Tair Kaldybayev — building things from Astana">
+  <meta property="og:description" content="18 y.o. founder from Kazakhstan. 20+ dead projects, still shipping. Got a crazy idea? Let's talk.">
+  <meta property="og:url" content="https://tairqaldy.xyz">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://tairqaldy.xyz/assets/tair.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☀️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600;1,9..144,900&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=7">
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div id="bits" aria-hidden="true"></div>
+  <div id="stickers" aria-hidden="true"></div>
 
-    <title>Tair Kaldybayev</title>
-    <meta name="description" content="AI engineer and founder. One card, off-white, watermarked." />
-    <meta name="theme-color" content="#0E0F12" />
-    <meta name="color-scheme" content="dark" />
+  <a class="handwritten site-tag" href="https://tairqaldy.xyz">tairqaldy.xyz ✦</a>
+  <button class="handwritten chaos-btn" id="chaos" type="button">chaos? →</button>
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Tair Kaldybayev" />
-    <meta property="og:description" content="AI engineer and founder. One card, off-white, watermarked." />
-    <meta property="og:image" content="/og.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Tair Kaldybayev" />
-    <meta name="twitter:description" content="AI engineer and founder. One card, off-white, watermarked." />
-    <meta name="twitter:image" content="/og.png" />
-
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-
-    <!-- Self-hosted, latin subset. Preloaded so type never swaps mid-reveal. -->
-    <link
-      rel="preload"
-      href="/fonts/cormorant-garamond-300-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/eb-garamond-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link rel="preload" href="/media/office-plate.jpg" as="image" />
-
-    <script type="module" crossorigin src="/assets/index-C55fyS6_.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/style-u89DptTH.css">
-  </head>
-
-  <!-- data-state is the only thing JS toggles on <body>:
-       boot | gate | film | reveal | settle | idle -->
-  <body data-state="boot">
-    <a class="skip-link" href="#card-figure">Skip to the card</a>
-
-    <main class="stage">
-      <!-- The room. Original footage, shot for this page: an empty boardroom
-           table at dusk. The film hands over to a defocused still of its own
-           last frame once the card takes the centre. -->
-      <div class="scene" aria-hidden="true">
-        <!-- src is assigned by main.js, never here: a repeat visit, a
-             reduced-motion visitor, or the OG renderer must never pay 3.5 MB
-             for a film they are not going to watch. -->
-        <video
-          class="scene__film"
-          id="film"
-          playsinline
-          preload="auto"
-          disablepictureinpicture
-          poster="/media/office-poster.jpg"
-          data-src="/media/scene.mp4"
-        ></video>
-        <div class="scene__plate"></div>
-        <div class="scene__grade"></div>
-      </div>
-
-      <div class="table">
-        <!-- Decoy cards. Deliberately unreadable: geometry only, no words, ever. -->
-        <div class="deck" id="deck" aria-hidden="true"></div>
-
-        <figure class="card-wrap" id="card-figure">
-          <div class="card-cast" aria-hidden="true"></div>
-
-          <div class="card" id="card">
-            <!-- Flattened layer: stock, texture, watermark, glare. Clipped to the card. -->
-            <div class="card__stock" aria-hidden="true">
-              <span class="card__mottle"></span>
-              <span class="card__grain"></span>
-              <span class="card__sheen"></span>
-              <span class="card__bounce"></span>
-              <span class="card__monogram" data-card="monogram"></span>
-              <span class="card__grade"></span>
-              <span class="card__glare"></span>
-            </div>
-
-            <!-- 3D layer: the printed matter, parallaxing above the stock. -->
-            <div class="card__content" aria-hidden="true">
-              <div class="layer layer--head">
-                <p class="card__name" data-card="name"></p>
-                <p class="card__title" data-card="title"></p>
-              </div>
-              <div class="layer layer--rule"><span class="card__rule"></span></div>
-              <div class="layer layer--details">
-                <ul class="card__details" data-card="details"></ul>
-              </div>
-              <div class="layer layer--mark">
-                <span class="card__mark" data-card="mark"></span>
-              </div>
-            </div>
+  <main>
+    <!-- hero -->
+    <section class="hero">
+      <div class="hero-row">
+        <div class="avatar-col reveal">
+          <div class="avatar-wrap" id="avatar">
+            <img src="assets/tair.png" alt="Tair in Amsterdam, mid silly pose" onerror="this.parentElement.classList.add('no-photo')">
+            <span class="avatar-fallback">☀️</span>
           </div>
-
-          <figcaption class="visually-hidden" data-card="caption"></figcaption>
-        </figure>
+          <span class="handwritten avatar-note">click me :)</span>
+        </div>
+        <div class="hero-text">
+          <p class="eyebrow reveal">салем, i'm</p>
+          <h1 id="name" class="reveal">
+            <span class="first" id="first-name">Tair</span>
+            <span class="roll">
+              <span class="a">Kaldybayev</span>
+              <span class="b">Qaldy</span>
+            </span>
+            <span class="aka handwritten">(known also as)</span>
+          </h1>
+          <p class="role mono reveal">18 y.o. <span class="d d1">·</span> founder <span class="d d2">·</span> software engineer <span class="d d3">·</span> astana</p>
+        </div>
       </div>
-
-      <p class="caption" id="caption" aria-live="polite" aria-atomic="true">
-        <span class="caption__line" id="caption-line"></span>
-      </p>
-
-      <nav class="contact" id="contact" aria-label="Contact"></nav>
-    </main>
-
-    <!-- The gate. Browsers block autoplay; the click is the permission grant. -->
-    <section class="gate" id="gate">
-      <p class="gate__line">Let's see Paul Allen's card.</p>
-      <button class="gate__button" id="gate-button" type="button">
-        <span class="gate__button-label">Play</span>
-      </button>
-      <p class="gate__note" id="gate-note">Sound on.</p>
     </section>
 
-    <button class="corner corner--skip" id="skip" type="button" hidden>Skip</button>
-    <button class="corner corner--replay" id="replay" type="button" hidden>Replay</button>
-    <button class="corner corner--sound" id="soundcheck" type="button" hidden>Play voiceover</button>
+    <!-- story -->
+    <section class="story">
+      <p class="reveal">Grew up in <strong class="wavy-teal">Kazakhstan</strong>. At 17 I moved to the <strong>Netherlands</strong> for university, and for a year I ran <span class="pl pl-sun">WordFactory</span>, my edtech startup, next to my classes. The Startup Readiness Program put <span class="circled"><mark class="m-sun">€13k</mark><svg class="ring" viewBox="0 0 120 44" preserveAspectRatio="none" aria-hidden="true"><path d="M8 22 C10 8 40 3 62 4 C92 5 114 12 112 24 C110 37 78 42 52 40 C24 38 6 33 8 22 Z" fill="none" stroke-width="2.2" stroke-linecap="round"/></svg></span> into it. When the year ended I chose the startup, dropped out, and flew home.</p>
 
-    <div class="crossfade" id="crossfade" aria-hidden="true"></div>
+      <p class="reveal">These days I'm in <strong class="wavy-sun">Astana</strong>, building in obsession. <span class="pl pl-teal">sof.kz</span> <span class="handwritten soon-note">(coming soon!)</span> is the big one: <strong>Success Operating Framework</strong>, software that turns business strategy into numbers you can actually track. <a class="pl pl-coral" href="https://sathustle.com" target="_blank" rel="noopener">SATHustle</a> is live, SAT prep where you battle other students 1v1. <span class="pl pl-violet">Qaldy AI</span> is hatching. Software engineering pays for all of it.</p>
 
-    <audio id="vo" preload="auto">
-      <source src="/audio/vo.m4a" type="audio/mp4" />
-    </audio>
+      <p class="reveal">I've killed <mark class="m-coral">20+ projects</mark> and stopped counting. <strong class="wavy-coral">ADHD</strong> sets the schedule: 2am beats in FL Studio, video edits nobody asked for, a new startup idea before breakfast. Obsessed is the polite word for it.</p>
+    </section>
 
-    <!--
-      No-JS fallback only. The live card is rendered from the CARD object in
-      src/main.js — that is the single place to edit these details.
-    -->
-    <noscript>
-      <div class="noscript-card">
-        <h1>Tair Kaldybayev</h1>
-        <p>AI Engineer &amp; Founder</p>
-        <p>Qaldy AI &middot; Astana, KZ</p>
-        <p>
-          <a href="https://tairqaldy.xyz" rel="noopener">tairqaldy.xyz</a> &middot;
-          <a href="https://github.com/tairqaldy" rel="noopener">github.com/tairqaldy</a>
-        </p>
+    <!-- shelf -->
+    <section class="shelfwrap reveal">
+      <span class="handwritten shelf-note">stuff i'm building →</span>
+      <div class="shelf">
+        <span class="thing t-teal">
+          <span class="thing-name">sof.kz</span>
+          <span class="handwritten thing-status">coming soon!</span>
+        </span>
+        <span class="thing t-violet">
+          <span class="thing-name">Qaldy AI</span>
+          <span class="handwritten thing-status">hatching</span>
+        </span>
+        <a class="thing t-coral" href="https://sathustle.com" target="_blank" rel="noopener">
+          <span class="thing-name">SATHustle</span>
+          <span class="handwritten thing-status">alive!</span>
+        </a>
+        <span class="thing t-sun">
+          <span class="thing-name">WordFactory</span>
+          <span class="handwritten thing-status">€13k backed</span>
+        </span>
+        <span class="handwritten next-note">+ next thing loading…</span>
       </div>
-    </noscript>
-  </body>
+    </section>
+
+    <!-- location + cta + socials -->
+    <footer class="reveal">
+      <p class="where mono">
+        <svg class="pin" viewBox="0 0 24 24" width="13" height="13"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+        astana, kazakhstan <span class="d d1">·</span> <span id="clock">--:--:--</span> <span class="d d2">·</span> 18 y.o.
+        <span class="handwritten clock-note">probably awake</span>
+      </p>
+      <div class="cta-row">
+        <p class="cta-line">got a crazy idea? <a href="https://t.me/tairqaldy" target="_blank" rel="noopener">let's talk →</a>
+          <span class="handwritten cta-note">anytime. seriously.</span>
+        </p>
+        <nav class="links" aria-label="social links">
+          <a class="s-x" href="https://x.com/tairkaldybyaev" target="_blank" rel="noopener" aria-label="X (Twitter)" title="X">
+            <svg viewBox="0 0 24 24"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.6l5.24 6.93ZM17.6 20.65h2.04L6.5 3.24H4.3Z"/></svg>
+          </a>
+          <a class="s-in" href="https://www.linkedin.com/in/tairkaldybayev" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.55V9h3.57ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0Z"/></svg>
+          </a>
+          <a class="s-gh" href="https://github.com/tairqaldy" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 .3a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58l-.01-2.04c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.9 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.81 1.1.81 2.22l-.01 3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .3Z"/></svg>
+          </a>
+          <a class="s-tg" href="https://t.me/tairqaldy" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram">
+            <svg viewBox="0 0 24 24"><path d="M11.94 0A12 12 0 1 0 24 12 12 12 0 0 0 11.94 0Zm5.9 8.16-1.97 9.3c-.15.66-.54.82-1.09.51l-3-2.21-1.45 1.4c-.16.16-.3.3-.6.3l.21-3.05 5.56-5.02c.24-.21-.05-.33-.37-.12l-6.87 4.33-2.96-.93c-.64-.2-.66-.64.14-.95l11.57-4.46c.53-.2 1-.13.83.9Z"/></svg>
+          </a>
+          <a class="s-ig" href="https://instagram.com/tairqaldy" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.3-1.46.72-2.13 1.38A5.88 5.88 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.3.79.72 1.46 1.38 2.13a5.88 5.88 0 0 0 2.13 1.38c.76.3 1.64.5 2.91.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.88 5.88 0 0 0 2.13-1.38 5.88 5.88 0 0 0 1.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.88 5.88 0 0 0-1.38-2.13A5.88 5.88 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0Zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84Zm0 10.15A4 4 0 1 1 16 12a4 4 0 0 1-4 4Zm7.85-10.4a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44Z"/></svg>
+          </a>
+          <a class="s-mail" href="mailto:tairkaldybayev@gmail.com" aria-label="Email" title="Email">
+            <svg viewBox="0 0 24 24"><path d="M24 5.46v13.09c0 1-.82 1.81-1.82 1.81h-1.9V8.87L12 14.77 3.72 8.87v11.5h-1.9c-1 0-1.82-.82-1.82-1.82V5.46c0-.5.24-.95.6-1.28.37-.34.87-.54 1.4-.54h.6L12 10.09l9.4-6.45h.6c.53 0 1.03.2 1.4.54.36.33.6.78.6 1.28Z"/></svg>
+          </a>
+        </nav>
+      </div>
+    </footer>
+  </main>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee-track"></div>
+  </div>
+
+  <script src="script.js?v=6"></script>
+</body>
 </html>
